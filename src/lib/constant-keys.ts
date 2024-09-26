@@ -1,0 +1,4 @@
+export const CONSTANT_KEYS = {
+  USERS: 'USERS',
+  REDEEM_HISTORY: 'REDEEM_HISTORY'
+}
