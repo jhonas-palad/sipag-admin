@@ -4,7 +4,7 @@ import { secureFetch } from "@/lib/server";
 import { revalidateTag } from "next/cache";
 import { ActionResult } from "@/types/actions";
 import { CONSTANT_KEYS } from "@/lib/constant-keys";
-
+import { UserSchemaT } from "@/schema/user";
 export type VerifyMutateParams = {
   id: string | number;
   action: "verify" | "unverify";
@@ -33,9 +33,7 @@ export const verifyUserAction = async ({
   }
 };
 
-export const claimPointsAction = async (
-  cleanerId: number,
-): Promise<ActionResult> => {
+const claimPointsAction = async (cleanerId: number): Promise<ActionResult> => {
   try {
     const data = await secureFetch(
       `/api/v1/waste-reports/redeem-records`,
@@ -51,7 +49,6 @@ export const claimPointsAction = async (
     revalidateTag(CONSTANT_KEYS.REDEEM_HISTORY);
     return { success: true, result: data };
   } catch (err) {
-    console.log(err);
     if (err instanceof FetchError) {
       return {
         ...err.details,
@@ -61,3 +58,24 @@ export const claimPointsAction = async (
     throw err;
   }
 };
+
+async function deleteUserAction(id: UserSchemaT["id"]) {
+  try {
+    const data = await secureFetch("/api/v1/users/" + id, false, {
+      method: "DELETE",
+    });
+    revalidateTag(CONSTANT_KEYS.USERS);
+    // redirect("/users");
+    return { success: true, result: data };
+  } catch (err) {
+    if (err instanceof FetchError) {
+      return {
+        ...err.details,
+        status: err.status,
+      };
+    }
+    throw err;
+  }
+}
+
+export { deleteUserAction, claimPointsAction };

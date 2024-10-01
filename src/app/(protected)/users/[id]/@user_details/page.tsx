@@ -9,15 +9,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-// import { Button } from "@/components/ui/button";
 import { getTitleNameInitials } from "@/lib/utils";
 import { CONFIG } from "@/lib/constants";
-import { VerifyButton } from "@/components/users/verify-btn";
+import { DeleteButton, VerifyButton } from "@/components/users/verify-btn";
 import { PointProgress } from "@/components/users/points-progress";
 import { Badge } from "@/components/ui/badge";
-
+import { PhotoProvider } from "@/components/photo-provider";
+import { DetailField } from "@/components/detail-field";
 const dateFormat = (date: string, withTime: boolean = false) => {
   if (withTime) {
     return format(date, "PPpp");
@@ -34,7 +32,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   if (!user) {
     return <div>User not found</div>;
   }
-  console.log(user?.photo)
+
   return (
     <Card className="m-12 min-w-[32rem]">
       <CardHeader>
@@ -43,15 +41,23 @@ export default async function Page({ params }: { params: { id: string } }) {
       </CardHeader>
       <CardContent className="flex flex-row gap-12">
         <div className="flex w-28 flex-col items-center">
-          <Avatar className="mb-6 h-20 w-20 border">
-            {user?.photo ? (
-              <AvatarImage src={user?.photo.img_file} className="" />
-            ) : (
-              <AvatarFallback className="text-black">
-                {getTitleNameInitials(user.first_name + user.last_name)}
-              </AvatarFallback>
-            )}
-          </Avatar>
+          {user?.photo && (
+            <Avatar className="mb-6 h-20 w-20 border">
+              {user?.photo ? (
+                <PhotoProvider src={user?.photo.img_file}>
+                  <AvatarImage
+                    src={user?.photo.img_file}
+                    className="cursor-pointer duration-150 hover:opacity-75"
+                  />
+                </PhotoProvider>
+              ) : (
+                <AvatarFallback className="text-black">
+                  {getTitleNameInitials(user.first_name + user.last_name)}
+                </AvatarFallback>
+              )}
+            </Avatar>
+          )}
+
           {user?.is_verified ? (
             <Badge variant="default" className="bg-green-500">
               Verified
@@ -114,26 +120,9 @@ export default async function Page({ params }: { params: { id: string } }) {
       <CardFooter className="justify-end gap-2">
         {/* <Button variant="secondary">Unverify</Button> */}
         <VerifyButton id={id} verified={user?.is_verified} />
-        {/* <Button variant="destructive">Delete user</Button> */}
+        <DeleteButton id={id} />
       </CardFooter>
       {/* <code>{JSON.stringify(data)}</code> */}
     </Card>
   );
 }
-
-const DetailField = ({
-  label,
-  value,
-  placeholder,
-}: {
-  label: string;
-  value: string;
-  placeholder: string;
-}) => {
-  return (
-    <div>
-      <Label className="text-lg font-bold">{label}</Label>
-      <Input value={!value ? "" : value} disabled placeholder={placeholder} />
-    </div>
-  );
-};

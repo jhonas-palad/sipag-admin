@@ -1,13 +1,26 @@
 "use client";
 import React, { useCallback, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useVerifyUser } from "@/hooks/mutations/use-verify-user";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ActionFailedResult, ActionSuccessResult } from "@/types/actions";
-import { toast } from "@/hooks/use-toast";
 import { VerifyMutateParams } from "@/actions/users";
 import { ToastAction } from "@/components/ui/toast";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { useVerifyUser } from "@/hooks/mutations/use-verify-user";
+import { useDeleteUser } from "@/hooks/mutations/use-delete-user";
+import { toast, useToast } from "@/hooks/use-toast";
+
+import { useRouter } from "next/navigation";
 
 export const VerifyButton = ({
   id,
@@ -115,3 +128,68 @@ export const VerifiedBadge = ({
     </Badge>
   );
 };
+
+const DeleteButton = ({
+  id,
+  className,
+}: {
+  id: string;
+  className?: string;
+}) => {
+  const { toast } = useToast();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const router = useRouter();
+  const { mutate } = useDeleteUser(id, {
+    onSettled(data, error, variables) {
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "An error occured",
+          description:
+            error.status === 404
+              ? "User details not found"
+              : "Something went wrong in server side.",
+        });
+      }
+      if (data) {
+        toast({
+          variant: "success",
+          title: "Success",
+          description: "User has been deleted.",
+        });
+      }
+      setDialogOpen(false);
+      router.prefetch("/users");
+      router.replace("/users");
+      console.log(data, error);
+    },
+  });
+  const handleDelete = useCallback(() => {
+    mutate(id);
+  }, [mutate, id]);
+  return (
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <DialogTrigger asChild>
+        <Button variant="destructive" className={className}>
+          Delete
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogDescription>
+            This action cannot be undone. This will permanently delete the
+            user&apos;s data
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button onClick={handleDelete} variant="destructive">
+            Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export { DeleteButton };

@@ -18,6 +18,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { MouseEvent } from "react";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -36,15 +37,19 @@ export function DataTable<TData, TValue>({
   const router = useRouter();
   const handleViewUser = useCallback(
     (e: MouseEvent<HTMLTableRowElement, globalThis.MouseEvent>, id: string) => {
-      const role = (e.target as HTMLElement).getAttribute("role");
-      if (role === "menuitem" || role === "menu") {
-        return;
+      e.preventDefault();
+      const validLocalName = [
+        'td'
+      ]
+      if (!validLocalName.includes(e.target?.localName)){
+        return 
       }
       router.prefetch(`/users/${id}`);
       router.push(`/users/${id}`);
     },
     [router],
   );
+
   return (
     <div className="rounded-md border">
       <Table>

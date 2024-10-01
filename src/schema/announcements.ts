@@ -2,6 +2,7 @@ import * as zod from "zod";
 import { UserSchema } from "./user";
 
 export const createAnnouncementSchema = zod.object({
+  id: zod.string().nullish(),
   title: zod.string().min(1, { message: "Title is required" }).max(255),
   description: zod
     .string()

@@ -12,6 +12,7 @@ export default auth(async (req: NextAuthRequest) => {
   const currentRoute = req.nextUrl.pathname;
   const authUser = req.auth;
   const validToken = await verifyToken((authUser as Session)?.token);
+
   if (PRIVATE_ROUTES.includes(currentRoute) && !validToken) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }

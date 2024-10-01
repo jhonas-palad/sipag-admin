@@ -19,6 +19,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useCallback, useMemo } from "react";
 import { VerifyMutateParams } from "@/actions/users";
+import { DeleteButton } from "@/components/users/verify-btn";
 
 export const columns: ColumnDef<UserSchemaT>[] = [
   {
@@ -125,8 +126,12 @@ const UserTableActions = ({ row }: CellContext<UserSchemaT, unknown>) => {
           {verified ? "Unverify" : "Verify"}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="bg-red-500 font-semibold text-neutral-50">
-          Delete User
+        <DropdownMenuItem
+          asChild
+          className="bg-red-500 font-semibold text-neutral-50"
+        >
+          <DeleteButton id={rowId as string} className="w-full cursor-pointer"/>
+          {/* Delete User */}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -4,7 +4,7 @@ import { CONSTANT_KEYS } from "../constant-keys";
 
 export async function getUserList(): Promise<UserSchemaT[]> {
   return await secureFetch("/api/v1/users?is_staff=false", true, {
-    next: { tags: [CONSTANT_KEYS.USERS] },
+    next: { tags: [CONSTANT_KEYS.USERS]},
   });
 }
 

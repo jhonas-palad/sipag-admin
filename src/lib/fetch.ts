@@ -16,8 +16,13 @@ export const fetchData = async (slug: string, init?: RequestInit) => {
     if (!response.ok) {
       notOk = true;
     }
-
-    data = await response.json();
+    try {
+      data = await response.json();
+    } catch (err) {
+      if (notOk) {
+        throw response;
+      }
+    }
     if (notOk) {
       throw response;
     }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import "react-photo-view/dist/react-photo-view.css";
 import { ReactQueryClientProvider } from "@/components/react-query-client-provider";
 import { Toaster } from "@/components/ui/toaster";
 const geistSans = localFont({
