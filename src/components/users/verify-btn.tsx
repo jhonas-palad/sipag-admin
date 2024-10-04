@@ -113,7 +113,6 @@ export const VerifiedBadge = ({
     queryKey: ["VERIFIED_BADGE" + id],
     queryFn: () => verified,
   });
-  console.log(verified, data);
   if (data) {
     return (
       <Badge variant="default" className="bg-green-500">
@@ -140,7 +139,7 @@ const DeleteButton = ({
   const [dialogOpen, setDialogOpen] = useState(false);
   const router = useRouter();
   const { mutate } = useDeleteUser(id, {
-    onSettled(data, error, variables) {
+    onSettled(data, error) {
       if (error) {
         toast({
           variant: "destructive",

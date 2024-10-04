@@ -2,11 +2,7 @@ import { deleteUserAction } from "@/actions/users";
 import { CONSTANT_KEYS } from "@/lib/constant-keys";
 import { UserSchemaT } from "@/schema/user";
 import { ActionFailedResult } from "@/types/actions";
-import {
-  QueryClient,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 export const useDeleteUser = (
   id: UserSchemaT["id"],
@@ -18,7 +14,7 @@ export const useDeleteUser = (
     mutationKey: [CONSTANT_KEYS.USERS + id],
     mutationFn: deleteUserAction,
     onSettled: (data, error, variables) => {
-      console.log(data, error);
+      console.log({ data, error });
       if (error) {
         return onSettled?.(
           null,
