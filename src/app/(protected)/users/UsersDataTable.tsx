@@ -38,11 +38,9 @@ export function DataTable<TData, TValue>({
   const handleViewUser = useCallback(
     (e: MouseEvent<HTMLTableRowElement, globalThis.MouseEvent>, id: string) => {
       e.preventDefault();
-      const validLocalName = [
-        'td'
-      ]
-      if (!validLocalName.includes(e.target?.localName)){
-        return 
+      const validLocalName = ["td"];
+      if (!validLocalName.includes((e.target as HTMLDivElement)?.localName)) {
+        return;
       }
       router.prefetch(`/users/${id}`);
       router.push(`/users/${id}`);
