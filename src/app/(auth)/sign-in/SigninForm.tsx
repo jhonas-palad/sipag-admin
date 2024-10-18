@@ -19,7 +19,7 @@ import { SigninFailedAlert } from "./signin-failed-alert";
 export const SigninForm = () => {
   const form = useForm({
     defaultValues: {
-      phone_number: "",
+      email: "",
       password: "",
     },
   });
@@ -64,12 +64,12 @@ export const SigninForm = () => {
         <div className="mb-6">
           <FormField
             control={form.control}
-            name="phone_number"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone Number</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="example-admin" {...field} />
+                  <Input placeholder="email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

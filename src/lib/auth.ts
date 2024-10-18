@@ -28,16 +28,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        phone_number: {
+        email: {
           type: "text",
         },
         password: {
           type: "password",
         },
       },
-      authorize: async ({ phone_number, password }) => {
+      authorize: async ({ email, password }) => {
         return await signInFromApi({
-          phone_number: phone_number as string,
+          email: email as string,
           password: password as string,
         });
       },
@@ -89,7 +89,7 @@ export const signInFromApi = async (credentials: SignInSchemaT) => {
     const token = user.token;
     return { ...user.user, token };
   } catch (err) {
-    console.log("err", err, credentials);
+    console.error("AuthError", err, credentials);
     if (err instanceof FetchError) {
       if (err.details.status >= 400 && err.details.status <= 403) {
         return null;

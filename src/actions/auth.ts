@@ -1,6 +1,7 @@
 "use server";
 
-import { signIn } from "@/lib/auth";
+import { signIn, signOut } from "@/lib/auth";
+import { AUTH_ENDPOINTS } from "@/lib/routes";
 import { SignInSchemaT } from "@/schema/user";
 import { AccessDenied, SignInError } from "@auth/core/errors";
 export async function signInAction(
@@ -16,4 +17,10 @@ export async function signInAction(
 
     throw err;
   }
+}
+
+export async function signOutAction() {
+  await signOut({
+    redirectTo: AUTH_ENDPOINTS[0],
+  });
 }

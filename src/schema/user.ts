@@ -17,7 +17,7 @@ export const UserSchema = z.object({
 export type UserSchemaT = z.infer<typeof UserSchema>;
 
 export const signInSchema = z.object({
-  phone_number: z.string().min(1, { message: "Phone number is required" }),
+  email: z.string().min(1, { message: "Email is required" }),
   password: z.string().min(1, { message: "Password is required" }),
 });
 

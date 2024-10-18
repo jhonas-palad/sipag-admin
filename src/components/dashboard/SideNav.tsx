@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { SideNavLink } from "./side-nav-link";
+import { SideNavLink, SignOut } from "./side-nav-link";
 import { auth } from "@/lib/auth";
 import { getTitleNameInitials } from "@/lib/utils";
 import { BellIcon, PersonIcon } from "@radix-ui/react-icons";
@@ -51,6 +51,7 @@ export const SideNav = async () => {
           <SideNavLink href="/users">
             <PersonIcon /> Users
           </SideNavLink>
+          <SignOut />
         </div>
       </div>
     </nav>
